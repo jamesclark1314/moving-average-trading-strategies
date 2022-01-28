@@ -82,6 +82,7 @@ merge = merge.merge(vma20, how = 'left',
                                   left_index = True, right_index = True)
 merge.columns = ['Price', 'Daily Rets', 'Log Rets', 'SMA100', 'EMA20', 'VMA20']
 
+
 # Plot of Annual Time Series of Daily Prices- SMA100- EMA20, VMA20
 merge.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
 plt.title('Moving Averages')
@@ -92,12 +93,6 @@ plt.show()
 # Trading Positions Based on EMA20 and SMA100 with Short Selling Allowed
 merge['Position 1'] = np.where(ema20 > sma100, 1, -1)
 
-# Creating Plot with Position on y-axis
-merge.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = merge['Position 1'].plot(secondary_y=True)
-plt.title('Moving Averages w/ Position 1')
-plt.show()
-
 # 4
 
 # Trading Positions Based on EMA20 and SMA100 with No Short Selling
@@ -107,43 +102,129 @@ merge['Position 2']= np.where(ema20 > sma100, 1, 0)
 
 # Log and Cumulative Returns for First 2 Strategies
 merge['Position 1 Log'] = merge['Log Rets'] * merge['Position 1'].shift(1)
-merge['P1 Long-Short CumRet'] = np.exp(np.log1p(merge['Position 1 Log']).cumsum())-1
+merge['P1 Long-Short CumRet'] = np.exp(merge['Position 1 Log'].loc['2015-02-10':].cumsum())
 
 merge['Position 2 Log'] = merge['Log Rets'] * merge['Position 2'].shift(1)
-merge['P2 Long Only CumRet'] = np.exp(np.log1p(merge['Position 2 Log']).cumsum())-1
+merge['P2 Long Only CumRet'] = np.exp(merge['Position 2 Log'].loc['2015-02-10':].cumsum())
 
 # 6
 
 # Trading Positions Based on VMA20 and SMA100 with Short Selling Allowed
 merge['Position 3'] = np.where(vma20 > sma100, 1, -1)
 
-# Creating Plot with Position on y-axis
-merge.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = merge['Position 3'].plot(secondary_y=True)
-plt.title('Moving Averages w/ Position 3')
-plt.show()
 
 # Trading Positions Based on VMA20 and SMA100 with No Short Selling
 merge['Position 4']= np.where(vma20 > sma100, 1, 0)
 
 # Log and Cumulative Returns for Second 2 Strategies
-
 merge['Position 3 Log'] = merge['Log Rets'] * merge['Position 3'].shift(1)
-merge['P3 Long-Short CumRet'] = np.exp(np.log1p(merge['Position 3 Log']).cumsum())-1
+merge['P3 Long-Short CumRet'] = np.exp(merge['Position 3 Log'].loc['2015-02-10':].cumsum())
 
 merge['Position 4 Log'] = merge['Log Rets'] * merge['Position 4'].shift(1)
-merge['P4 Long Only CumRet'] = np.exp(np.log1p(merge['Position 4 Log']).cumsum())-1
+merge['P4 Long Only CumRet'] = np.exp(merge['Position 4 Log'].loc['2015-02-10':].cumsum())
+
+# Cumulative Returns for a Passive Buy & Hold Strategy
+merge['Buy & Hold CumRet'] = np.exp(merge['Log Rets'].loc['2015-02-10':].cumsum())
+
+# Separating the Dataframe Into Years
+y2015 = merge.loc['2015']
+y2016 = merge.loc['2016']
+y2017 = merge.loc['2017']
+y2018 = merge.loc['2018']
+y2019 = merge.loc['2019']
+y2020 = merge.loc['2020']
+y2021 = merge.loc['2021']
+
+# PLOTS
+
+# Creating Plots with Position 1 on y-axis
+y2015.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2015['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2015')
+plt.show()
+
+y2016.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2016['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2016')
+plt.show()
+
+y2017.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2017['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2017')
+plt.show()
+
+y2018.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2018['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2018')
+plt.show()
+
+y2019.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2019['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2019')
+plt.show()
+
+y2020.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2020['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2020')
+plt.show()
+
+y2021.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2021['Position 1'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 1 - 2021')
+plt.show()
+
+# Creating Plot with Position 3 on y-axis
+y2015.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2015['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2015')
+plt.show()
+
+y2016.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2016['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2016')
+plt.show()
+
+y2017.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2017['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2017')
+plt.show()
+
+y2018.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2018['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2018')
+plt.show()
+
+y2019.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2019['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2019')
+plt.show()
+
+y2020.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2020['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2020')
+plt.show()
+
+y2021.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+secondary_y = y2021['Position 3'].plot(secondary_y = True)
+plt.title('Moving Averages w/ Position 3 - 2021')
+plt.show()
 
 # Output Dataframe to CSV
 merge.to_csv('James Clark Assignment 2 Output.csv')
 
 # Outputs
-print('The BTC cumulative return is',cum_ret)
+print("")
+print('The cumulative return of a passive buy-and-hold strategy is'
+      ,merge['Buy & Hold CumRet'][-1])
+print("")
 print('The cumulative return of the P1 long-short strategy is'
       ,merge['P1 Long-Short CumRet'][-1])
+print("")
 print('The cumulative return of the P2 long only strategy is'
       ,merge['P2 Long Only CumRet'][-1])
+print("")
 print('The cumulative return of the P3 long-short strategy is'
       ,merge['P3 Long-Short CumRet'][-1])
+print("")
 print('The cumulative return of the P4 long only strategy is'
       ,merge['P4 Long Only CumRet'][-1])
