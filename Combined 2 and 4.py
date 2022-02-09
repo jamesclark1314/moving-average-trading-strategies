@@ -171,88 +171,24 @@ print("")
 print('The cumulative return of the P4 long only strategy is'
       ,merge['P4 Long Only CumRet'][-1])
 
-# Separating the Dataframe Into Years
-y2015 = merge.loc['2015']
-y2016 = merge.loc['2016']
-y2017 = merge.loc['2017']
-y2018 = merge.loc['2018']
-y2019 = merge.loc['2019']
-y2020 = merge.loc['2020']
-y2021 = merge.loc['2021']
+# Function slices the date by year and returns a chart with the position
+# plotted on top of the moving averages
+def date_slicer(year):
+    frame = merge.loc[year]
+    
+    # Position 1
+    frame.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+    secondary_y = frame['Position 1'].plot(secondary_y = True)
+    plt.title('Moving Averages w/ Position 1 - ' + year)
+    plt.show()
+    
+    # Position 3
+    frame.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
+    secondary_y = frame['Position 3'].plot(secondary_y = True)
+    plt.title('Moving Averages w/ Position 3 - ' + year)
+    plt.show()
 
-# PLOTS
-
-# Creating Plots with Position 1 on y-axis
-y2015.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2015['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2015')
-plt.show()
-
-y2016.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2016['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2016')
-plt.show()
-
-y2017.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2017['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2017')
-plt.show()
-
-y2018.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2018['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2018')
-plt.show()
-
-y2019.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2019['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2019')
-plt.show()
-
-y2020.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2020['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2020')
-plt.show()
-
-y2021.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2021['Position 1'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 1 - 2021')
-plt.show()
-
-# Creating Plot with Position 3 on y-axis
-y2015.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2015['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2015')
-plt.show()
-
-y2016.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2016['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2016')
-plt.show()
-
-y2017.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2017['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2017')
-plt.show()
-
-y2018.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2018['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2018')
-plt.show()
-
-y2019.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2019['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2019')
-plt.show()
-
-y2020.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2020['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2020')
-plt.show()
-
-y2021.plot(y = ['Price','SMA100', 'EMA20', 'VMA20'])
-secondary_y = y2021['Position 3'].plot(secondary_y = True)
-plt.title('Moving Averages w/ Position 3 - 2021')
-plt.show()
+date_slicer('2019')
 
 # Output Dataframe to CSV
 merge.to_csv('Moving Average Output.csv')
