@@ -127,6 +127,9 @@ for ema1,sma1 in product(ema_range, sma_range):
     cum_rets = np.exp(top10df['pos_log'].iloc[sma1:].sum())-1
     data = {'EMA Length': ema1, 'SMA Length': sma1, 'Cum Rets': cum_rets}
     results = results.append(data, ignore_index = True)
+    
+# Create a dataframe for the top 10 strategies    
+top_strats = results.sort_values(by = ['Cum Rets'], ascending = False).head(10)
 
 # Outputs
 print("")
@@ -147,31 +150,41 @@ print("")
 print("_________________________________________________________________")
 print("")
 
+ema_ideal = top_strats['EMA Length'].iloc[0].astype(int)
+sma_ideal = top_strats['SMA Length'].iloc[0].astype(int)
+
 # Create a dataframe for the ideal strategy
-ideal_strat = pd.DataFrame(columns = ['SMA 150'])
+ideal_strat = pd.DataFrame(columns = [f'SMA{sma_ideal}'])
 
-# 100-Day Simple Moving Average
-ideal_strat['SMA 150'] = pton_hist['Close Price'].rolling(window = 150).mean()
+# Ideal Simple Moving Average
+ideal_strat[f'SMA{sma_ideal}'] = pton_hist['Close Price'].rolling(
+    window = sma_ideal).mean()
 
-# Create 20-day SMA to modify price data
-sma68 = pton_hist['Close Price'].rolling(window = 68).mean()
+# Create new SMA to modify price data
+sma_new = pton_hist['Close Price'].rolling(
+    window = ema_ideal).mean()
 mod_price = pton_hist['Close Price'].copy()
-mod_price.iloc[0:68] = sma68[0:68]
+mod_price.iloc[0:ema_ideal] = sma_new[0:ema_ideal]
 
-# 20-Day Exponential Moving Average
-ema_window = 68
-ideal_strat['EMA 68'] = mod_price.ewm(span = ema_window, adjust = False).mean()
+# Ideal Exponential Moving Average
+ema_window = ema_ideal
+ideal_strat[f'EMA{ema_ideal}'] = mod_price.ewm(span = ema_window, adjust = False).mean()
 
-# Trading positions based on EMA68 and SMA150
-ideal_strat['Pos'] = np.where(ideal_strat['EMA 68'] > ideal_strat['SMA 150'], 1, -1)
+# Trading positions based on ideal EMA and ideal SMA
+ideal_strat['Pos'] = np.where(ideal_strat[f'EMA{ema_ideal}'] > ideal_strat[
+    f'SMA{sma_ideal}'], 1, -1)
 
 # Merge the price with ideal_strat
 ideal_strat = ideal_strat.merge(mov_av['Price'], how = 'left', 
                                   left_index = True, right_index = True)
 
-# Plot of Annual Time Series of SMA150 & EMA68
-ideal_strat.plot(y = ['SMA 150', 'EMA 68', 'Price'])
-plt.title('SMA 100 & EMA 68')
+# Calculate cumulative returns of the ideal strategy
+ideal_logs = pton_hist['Log Rets'] * ideal_strat['Pos'].shift(1)
+ideal_strat['CumRet'] = np.exp(ideal_logs.iloc[sma_ideal:].cumsum())-1
+
+# Plot of Annual Time Series of ideal SMA & ideal EMA
+ideal_strat.plot(y = [f'SMA{sma_ideal}', f'EMA{ema_ideal}', 'Price'])
+plt.title(f'SMA{sma_ideal} & EMA{ema_ideal}')
 plt.show()
 
 # The terminal outputs whether we should take a long or short position
