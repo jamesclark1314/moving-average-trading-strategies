@@ -192,7 +192,7 @@ if ideal_strat['Pos'][-1] == 1 and ideal_strat['Pos'][-2] == -1:
     print('ESTABLISH A LONG POSITION')
 elif ideal_strat['Pos'][-1] == 1 and ideal_strat['Pos'][-2] == 1:
     print('MAINTAIN LONG POSITION')
-if ideal_strat['Pos'][-1] == -1 and ideal_strat['Pos'][-2] == 1:
+elif ideal_strat['Pos'][-1] == -1 and ideal_strat['Pos'][-2] == 1:
     print('ESTABLISH A SHORT POSITION')
 else:
     print('MAINTAIN SHORT POSITION')
